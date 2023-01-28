@@ -192,10 +192,30 @@ app.post('/api/users/:userId/cart', async (req, res) => {
 })
 
 // Remove lesson from the cart
-app.delete('/api/users/:userId/cart/:lessonId', (req, res) => {
-  const { lessonId } = req.params
-  cartItems = cartItems.filter(lesson => lesson.id != lessonId)
+app.delete('/api/users/:userId/cart/:lessonId', async (req, res) => {
+  const { userId, lessonId } = req.params
+  const client = await MongoClient.connect('mongodb://localhost:27017', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  const db = client.db('lessons-db')
+
+  await db.collection('users').updateOne(
+    { id: userId },
+    {
+      $pull: { cartItems: lessonId },
+    }
+  )
+
+  const user = await db.collection('users').findOne({ id: userId })
+  const lessons = await db.collection('lessons').find({}).toArray()
+  const cartItemIds = user.cartItems
+  const cartItems = cartItemIds.map(id =>
+    lessons.find(lesson => lesson.id === id)
+  )
+
   res.status(200).json(cartItems)
+  client.close()
 })
 
 app.listen(8000, () => {
