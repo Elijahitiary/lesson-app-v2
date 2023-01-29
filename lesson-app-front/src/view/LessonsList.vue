@@ -52,7 +52,6 @@
 
 <script>
 import LessonCard from '@/components/LessonCard.vue'
-import lesson from '@/data'
 
 export default {
   name: 'LessonsList',
@@ -64,8 +63,14 @@ export default {
       search: '',
       sortBy: '',
       order: '',
-      lessons: lesson(),
+      lessons: [],
     }
+  },
+  async created() {
+    const url = '/api/lessons'
+    const result = await fetch(url)
+    const lessons = await result.json()
+    this.lessons = lessons
   },
   methods: {
     openShopping() {
@@ -78,18 +83,6 @@ export default {
       this.sortLetters('Location')
       // Price
       this.sortNumbers('Price')
-      // Availability space
-      if (this.sortBy == 'Availability') {
-        if (this.order == 'Ascending') {
-          return this.lessons.sort(
-            (a, b) => a.getLeftSpace() - b.getLeftSpace()
-          )
-        } else {
-          return this.lessons.sort(
-            (a, b) => b.getLeftSpace() - a.getLeftSpace()
-          )
-        }
-      }
     },
     sortLetters(title) {
       if (this.sortBy == title) {
@@ -134,7 +127,7 @@ export default {
     lessonFilter() {
       return this.lessons.filter(lesson => {
         return (
-          lesson.subject.toLowerCase().includes(this.search.toLowerCase()) ||
+          lesson.topic.toLowerCase().includes(this.search.toLowerCase()) ||
           lesson.location.toLowerCase().includes(this.search.toLowerCase())
         )
       })

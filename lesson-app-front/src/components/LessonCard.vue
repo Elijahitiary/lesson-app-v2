@@ -7,12 +7,9 @@
     <p>Location: {{ lesson.location }}</p>
     <hr />
     <p>Price: {{ '£' + lesson.price }}</p>
+
     <hr />
-    <p>Space: {{ getLeftSpaces() }}</p>
-    <hr />
-    <button :disabled="getLeftSpaces() == 0" @click="handleAddToCart()">
-      Add to Cart
-    </button>
+    <button @click="handleAddToCart()">Add to Cart</button>
   </div>
 </template>
 
@@ -27,14 +24,7 @@ export default {
   },
   methods: {
     handleAddToCart() {
-      this.$store.commit('ADD_TO_CART', this.lesson)
-      this.$store.state.cart.find(x => x.id == this.lesson.id).space--
-      this.getLeftSpaces()
-    },
-    getLeftSpaces() {
-      return (
-        this.$store.state.cart.find(x => x.id == this.lesson.id)?.space ?? 5
-      )
+      console.log('NO THING RIGHT NOW...')
     },
   },
 }
