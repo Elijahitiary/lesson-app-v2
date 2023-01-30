@@ -52,8 +52,14 @@ export default {
       userphone: '',
       phoneEmpty: false,
       nameEmpty: false,
-      items: this.$store.state.cart,
+      items: [],
     }
+  },
+  async created() {
+    const url = '/api/users/test1/cart'
+    fetch(url)
+      .then(res => res.json())
+      .then(cartItems => (this.items = cartItems))
   },
   methods: {
     openLessons() {

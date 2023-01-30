@@ -1,7 +1,7 @@
 <template>
   <div class="lesson-card">
-    <img :src="lesson.image" :alt="lesson.subject + ' image'" />
-    <h4>Subject: {{ lesson.subject }} <i :class="lesson.icon"></i></h4>
+    <img :src="lesson.image" :alt="lesson.topic + ' image'" />
+    <h4>Topic: {{ lesson.topic }} <i :class="lesson.icon"></i></h4>
 
     <hr />
     <p>Location: {{ lesson.location }}</p>

@@ -1,7 +1,7 @@
 <template>
   <div class="shopping-card-container">
     <img :src="item.image" :alt="item.subject + ' image'" />
-    <p>{{ item.subject }}</p>
+    <p>{{ item.topic }}</p>
     <p>{{ item.location }}</p>
     <p>{{ '£' + item.price }}</p>
     <button @click="removeItem" class="remove-btn">remove</button>
@@ -17,8 +17,9 @@ export default {
   },
   methods: {
     removeItem() {
-      this.$store.state.cart.splice(this.index, 1)
-      this.$store.state.cart.find(x => x.id == this.item.id).space += 1
+      console.log('NO THING RIGHT NOW!')
+      // this.$store.state.cart.splice(this.index, 1)
+      // this.$store.state.cart.find(x => x.id == this.item.id).space += 1
     },
   },
 }

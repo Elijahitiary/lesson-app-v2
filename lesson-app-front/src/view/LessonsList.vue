@@ -24,7 +24,7 @@
       <p>Sort By</p>
       <select v-model="sortBy">
         <option value="" selected disabled hidden>Choose</option>
-        <option>Subject</option>
+        <option>Topic</option>
         <option>Location</option>
         <option>Price</option>
         <option>Availability</option>
@@ -68,9 +68,9 @@ export default {
   },
   async created() {
     const url = '/api/lessons'
-    const result = await fetch(url)
-    const lessons = await result.json()
-    this.lessons = lessons
+    fetch(url)
+      .then(res => res.json())
+      .then(lessons => (this.lessons = lessons))
   },
   methods: {
     openShopping() {
@@ -78,7 +78,7 @@ export default {
     },
     sortedLessons() {
       // Subject
-      this.sortLetters('Subject')
+      this.sortLetters('Topic')
       // Location
       this.sortLetters('Location')
       // Price
