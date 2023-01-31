@@ -14,10 +14,15 @@
 </template>
 
 <script>
+import { useToast } from 'vue-toastification'
 export default {
   name: 'LessonCard',
   props: {
     lesson: Object,
+  },
+  setup() {
+    const toast = useToast()
+    return { toast }
   },
   data() {
     return {}
@@ -34,7 +39,18 @@ export default {
         body: JSON.stringify({ lessonId: this.lesson.lessonId }),
       })
         .then(res => res.json())
-        .then(data => console.log(data.msg))
+        .then(data => {
+          if (data.success === true) {
+            this.showSuccessMessage()
+          }
+        })
+    },
+
+    showSuccessMessage() {
+      this.toast.success('successfully added lesson', {
+        timeout: 2000,
+        position: 'bottom-left',
+      })
     },
   },
 }
