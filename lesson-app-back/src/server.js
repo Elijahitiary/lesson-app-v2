@@ -86,7 +86,7 @@ app.post('/api/users/:userName/cart', async (req, res) => {
     lessons.find(lesson => lesson.id === id)
   )
   res.status(200).json({
-    msg: 'successfully added lesson',
+    msg: 'Added successfully to the shopping cart',
     success: true,
   })
   client.close()
@@ -115,10 +115,26 @@ app.delete('/api/users/:userName/cart/:lessonId', async (req, res) => {
     lessons.find(lesson => lesson.lessonId === id)
   )
 
-  res.status(200).json({
-    msg: cartItems,
-    success: true,
+  res.status(200).json(cartItems)
+  client.close()
+})
+
+// Clear all lessons after checkout
+app.post('/api/users/:userName/clear-cart', async (req, res) => {
+  const { userName, lessonId } = req.params
+  const client = await MongoClient.connect('mongodb://localhost:27017', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   })
+  const db = client.db('lessons-db')
+
+  await db.collection('users').updateOne(
+    { username: userName },
+    {
+      $set: { cartItems: [] },
+    }
+  )
+  res.status(200).json('clear all cart')
   client.close()
 })
 
