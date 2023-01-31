@@ -122,56 +122,6 @@ app.delete('/api/users/:userName/cart/:lessonId', async (req, res) => {
   client.close()
 })
 
-// Register new user
-app.post('/api/register', async (req, res) => {
-  const { email, username, passowrd, confirm_password } = req.body
-
-  const client = await MongoClient.connect('mongodb://localhost:27017', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  const db = client.db('lessons-db')
-
-  if (passowrd != confirm_password) {
-    return res.status(400).json({
-      msg: 'Password do not match!',
-      success: false,
-    })
-  }
-
-  // Check is email alredy exist
-  const userEmail = await db.collection('users').findOne({ email: email })
-  if (userEmail) {
-    return res.status(400).json({
-      msg: 'Email already exists, please login',
-      success: false,
-    })
-  }
-
-  // Check is username alredy exist
-  const userName = await db.collection('users').findOne({ username: username })
-  if (userName) {
-    return res.status(400).json({
-      msg: 'Username already exists, try another one',
-      success: false,
-    })
-  }
-
-  await db.collection('users').insertOne({
-    email: email,
-    passowrd: passowrd,
-    confirm_password: confirm_password,
-    username: username,
-    cartItems: [],
-  })
-
-  res.status(200).json({
-    msg: 'Successfully registered',
-    success: true,
-  })
-  client.close()
-})
-
 // Login to account
 app.post('/api/login', async (req, res) => {
   const { email, passowrd } = req.body
