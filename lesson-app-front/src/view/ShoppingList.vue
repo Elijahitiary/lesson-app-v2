@@ -7,6 +7,7 @@
     </div>
     <div class="shopping-list">
       <ShoppingCart
+        v-on:remove-item="removeFromCart($event)"
         v-for="(item, index) in items"
         :item="item"
         :key="index"
@@ -62,6 +63,14 @@ export default {
       .then(cartItems => (this.items = cartItems))
   },
   methods: {
+    async removeFromCart(lessonId) {
+      const url = `/api/users/test1/cart/${lessonId}`
+      fetch(url, {
+        method: 'DELETE',
+      })
+        .then(res => res.json())
+        .then(newCart => (this.items = newCart))
+    },
     openLessons() {
       this.$router.push({ path: '/' })
     },

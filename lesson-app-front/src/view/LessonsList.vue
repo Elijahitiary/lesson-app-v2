@@ -64,6 +64,7 @@ export default {
       sortBy: '',
       order: '',
       lessons: [],
+      cardCount: 0,
     }
   },
   async created() {

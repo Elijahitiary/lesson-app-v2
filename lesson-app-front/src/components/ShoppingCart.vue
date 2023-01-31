@@ -4,7 +4,9 @@
     <p>{{ item.topic }}</p>
     <p>{{ item.location }}</p>
     <p>{{ '£' + item.price }}</p>
-    <button @click="removeItem" class="remove-btn">remove</button>
+    <button @click="$emit('remove-item', item.lessonId)" class="remove-btn">
+      remove
+    </button>
   </div>
 </template>
 
@@ -14,13 +16,6 @@ export default {
   props: {
     item: Object,
     index: Number,
-  },
-  methods: {
-    removeItem() {
-      console.log('NO THING RIGHT NOW!')
-      // this.$store.state.cart.splice(this.index, 1)
-      // this.$store.state.cart.find(x => x.id == this.item.id).space += 1
-    },
   },
 }
 </script>
