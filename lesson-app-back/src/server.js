@@ -19,21 +19,21 @@ app.get('/api/lessons', async (req, res) => {
 })
 
 // GET user data
-app.get('/api/users/:userName', async (req, res) => {
-  const { userName } = req.params
+app.get('/api/users', async (req, res) => {
+  // const { userName } = req.params
   const client = await MongoClient.connect('mongodb://localhost:27017', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   const db = client.db('lessons-db')
-  const user = await db.collection('users').findOne({ username: userName })
+  const user = await db.collection('users').find({}).toArray()
   if (!user) {
     res.status(404).json({
       msg: 'user not found!',
       success: false,
     })
   }
-  res.status(200).json(user)
+  res.status(200).json({ email: user[0].email, passowrd: user[0].passowrd })
   client.close()
 })
 
@@ -56,7 +56,7 @@ app.get('/api/users/:userName/cart', async (req, res) => {
   const lessons = await db.collection('lessons').find({}).toArray()
   const cartItemIds = user.cartItems
   const cartItems = cartItemIds.map(id =>
-    lessons.find(lesson => lesson.id === id)
+    lessons.find(lesson => lesson.lessonId === id)
   )
   res.status(200).json(cartItems)
   client.close()
@@ -71,6 +71,7 @@ app.post('/api/users/:userName/cart', async (req, res) => {
     useUnifiedTopology: true,
   })
   const db = client.db('lessons-db')
+  const lessons = await db.collection('lessons').find({}).toArray()
 
   await db.collection('users').updateOne(
     { username: userName },
@@ -85,7 +86,7 @@ app.post('/api/users/:userName/cart', async (req, res) => {
     lessons.find(lesson => lesson.id === id)
   )
   res.status(200).json({
-    msg: cartItems,
+    msg: 'successfully added lesson',
     success: true,
   })
   client.close()
@@ -111,7 +112,7 @@ app.delete('/api/users/:userName/cart/:lessonId', async (req, res) => {
   const lessons = await db.collection('lessons').find({}).toArray()
   const cartItemIds = user.cartItems
   const cartItems = cartItemIds.map(id =>
-    lessons.find(lesson => lesson.id === id)
+    lessons.find(lesson => lesson.lessonId === id)
   )
 
   res.status(200).json({
