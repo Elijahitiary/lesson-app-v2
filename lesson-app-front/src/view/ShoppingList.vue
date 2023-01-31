@@ -69,7 +69,10 @@ export default {
         method: 'DELETE',
       })
         .then(res => res.json())
-        .then(newCart => (this.items = newCart))
+        .then(newCart => {
+          this.items = newCart
+          this.$store.state.cart.splice(this.index, 1)
+        })
     },
     openLessons() {
       this.$router.push({ path: '/' })

@@ -42,6 +42,7 @@ export default {
         .then(data => {
           if (data.success === true) {
             this.showSuccessMessage()
+            this.$store.commit('ADD_TO_CART', this.lesson)
           }
         })
     },
