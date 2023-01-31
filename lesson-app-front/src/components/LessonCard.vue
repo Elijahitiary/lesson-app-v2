@@ -23,8 +23,18 @@ export default {
     return {}
   },
   methods: {
-    handleAddToCart() {
-      console.log('NO THING RIGHT NOW...')
+    async handleAddToCart() {
+      const url = '/api/users/test1/cart'
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ lessonId: this.lesson.lessonId }),
+      })
+        .then(res => res.json())
+        .then(data => console.log(data.msg))
     },
   },
 }

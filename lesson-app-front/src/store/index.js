@@ -5,17 +5,13 @@ export default createStore({
     cart: [],
   },
   getters: {
-    getTodoById(cart) {
+    getCart(cart) {
       return cart
-    }
+    },
   },
   mutations: {
     ADD_TO_CART(state, lesson) {
       state.cart.push(lesson)
-    }
+    },
   },
-  actions: {
-  },
-  modules: {
-  }
 })
