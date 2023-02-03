@@ -79,6 +79,7 @@ export default {
         .then(newCart => {
           this.items = newCart
           this.$store.state.cart.splice(this.index, 1)
+          localStorage.setItem('cartCount', (this.$store.state.cardCount -= 1))
         })
     },
     async clearShoppingCart() {
@@ -128,7 +129,8 @@ export default {
     },
     closeModal() {
       this.isOpen = false
-      this.$router.push({ path: '/Lesson' })
+      localStorage.setItem('cartCount', 0)
+      this.$router.push({ path: '/Lesson' }).then(() => this.$router.go())
       this.$store.state.cart = []
       this.clearShoppingCart()
     },

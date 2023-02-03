@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     cart: [],
+    cardCount: Number(localStorage.getItem('cartCount')),
   },
   getters: {
     getCart(cart) {

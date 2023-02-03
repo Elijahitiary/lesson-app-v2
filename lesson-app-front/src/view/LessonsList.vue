@@ -3,10 +3,10 @@
     <button
       class="card-btn"
       @click="openShopping"
-      :disabled="this.$store.state.cart.length == 0"
-      :class="{ dis: this.$store.state.cart.length == 0 }"
+      :disabled="this.$store.state.cardCount == 0"
+      :class="{ dis: this.$store.state.cardCount == 0 }"
     >
-      Cart: {{ this.$store.state.cart.length }}
+      Cart {{ this.$store.state.cardCount || 0 }}
     </button>
   </div>
 
@@ -58,13 +58,13 @@ export default {
   components: {
     LessonCard,
   },
+
   data() {
     return {
       search: '',
       sortBy: '',
       order: '',
       lessons: [],
-      cardCount: 0,
     }
   },
   async created() {
@@ -73,6 +73,7 @@ export default {
       .then(res => res.json())
       .then(lessons => (this.lessons = lessons))
   },
+
   methods: {
     openShopping() {
       this.$router.push({ path: '/Shopping' })
