@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     async removeFromCart(lessonId) {
-      const url = `/api/users/test1/cart/${lessonId}`
+      const url = `/api/users/123/cart/${lessonId}`
       fetch(url, {
         method: 'DELETE',
       })

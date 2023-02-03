@@ -17,8 +17,8 @@ app.use(
 // GET Lessons List
 app.get('/api/lessons', async (req, res) => {
   const client = await MongoClient.connect(
-    process.env.MONGO_PASS
-      ? `mongodb+srv://${MONGO_DBNAME}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
+    process.env.MONGO_PASS && process.env.MONGO_USER
+      ? `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
       : 'mongodb://localhost:27017',
     {
       useNewUrlParser: true,
@@ -36,8 +36,8 @@ app.get('/api/lessons', async (req, res) => {
 app.get('/api/users', async (req, res) => {
   // const { userName } = req.params
   const client = await MongoClient.connect(
-    process.env.MONGO_PASS
-      ? `mongodb+srv://${MONGO_DBNAME}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
+    process.env.MONGO_PASS && process.env.MONGO_USER
+      ? `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
       : 'mongodb://localhost:27017',
     {
       useNewUrlParser: true,
@@ -59,8 +59,8 @@ app.get('/api/users', async (req, res) => {
 // GET User cart
 app.get('/api/users/:userName/cart', async (req, res) => {
   const client = await MongoClient.connect(
-    process.env.MONGO_PASS
-      ? `mongodb+srv://${MONGO_DBNAME}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
+    process.env.MONGO_PASS && process.env.MONGO_USER
+      ? `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
       : 'mongodb://localhost:27017',
     {
       useNewUrlParser: true,
@@ -91,8 +91,8 @@ app.post('/api/users/:userName/cart', async (req, res) => {
   const { userName } = req.params
   const { lessonId } = req.body
   const client = await MongoClient.connect(
-    process.env.MONGO_PASS
-      ? `mongodb+srv://${MONGO_DBNAME}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
+    process.env.MONGO_PASS && process.env.MONGO_USER
+      ? `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
       : 'mongodb://localhost:27017',
     {
       useNewUrlParser: true,
@@ -122,11 +122,11 @@ app.post('/api/users/:userName/cart', async (req, res) => {
 })
 
 // Remove lesson from the cart
-app.delete('/api/users/:userName/cart/:lessonId', async (req, res) => {
-  const { userName, lessonId } = req.params
+app.delete('/api/users/:userId/cart/:lessonId', async (req, res) => {
+  const { userId, lessonId } = req.params
   const client = await MongoClient.connect(
-    process.env.MONGO_PASS
-      ? `mongodb+srv://${MONGO_DBNAME}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
+    process.env.MONGO_PASS && process.env.MONGO_USER
+      ? `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
       : 'mongodb://localhost:27017',
     {
       useNewUrlParser: true,
@@ -136,13 +136,14 @@ app.delete('/api/users/:userName/cart/:lessonId', async (req, res) => {
   const db = client.db(process.env.MONGO_DBNAME || 'lessons-db')
 
   await db.collection('users').updateOne(
-    { username: userName },
+    { id: userId },
     {
       $pull: { cartItems: lessonId },
     }
   )
 
-  const user = await db.collection('users').findOne({ username: userName })
+  const user = await db.collection('users').findOne({ id: userId })
+  console.log(user)
   const lessons = await db.collection('lessons').find({}).toArray()
   const cartItemIds = user.cartItems
   const cartItems = cartItemIds.map(id =>
@@ -157,8 +158,8 @@ app.delete('/api/users/:userName/cart/:lessonId', async (req, res) => {
 app.post('/api/users/:userName/clear-cart', async (req, res) => {
   const { userName, lessonId } = req.params
   const client = await MongoClient.connect(
-    process.env.MONGO_PASS
-      ? `mongodb+srv://${MONGO_DBNAME}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
+    process.env.MONGO_PASS && process.env.MONGO_USER
+      ? `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
       : 'mongodb://localhost:27017',
     {
       useNewUrlParser: true,
@@ -182,8 +183,8 @@ app.post('/api/login', async (req, res) => {
   const { email, password } = req.body
 
   const client = await MongoClient.connect(
-    process.env.MONGO_PASS
-      ? `mongodb+srv://${MONGO_DBNAME}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
+    process.env.MONGO_PASS && process.env.MONGO_USER
+      ? `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
       : 'mongodb://localhost:27017',
     {
       useNewUrlParser: true,
