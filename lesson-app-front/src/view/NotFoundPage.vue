@@ -1,6 +1,6 @@
 <template>
   <h1>404: Page Not Found</h1>
-  <img src="../assets/404.png" alt="" />
+  <img src="../assets/404.png" alt="404 error" />
 </template>
 
 <script>

@@ -6,6 +6,13 @@
       </button>
     </div>
     <div class="shopping-list">
+      <h3 v-if="items.length === 0">The shopping cart is empty.</h3>
+      <img
+        v-if="items.length === 0"
+        src="../assets/shopping.png"
+        alt="404 error"
+        class="empty-cart"
+      />
       <ShoppingCart
         v-on:remove-item="removeFromCart($event)"
         v-for="(item, index) in items"
@@ -74,8 +81,20 @@ export default {
           this.$store.state.cart.splice(this.index, 1)
         })
     },
+    async clearShoppingCart() {
+      const url = '/api/users/test1/clear-cart'
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(res => res.json())
+        .then(_ => {})
+    },
     openLessons() {
-      this.$router.push({ path: '/' })
+      this.$router.push({ path: '/Lesson' })
     },
     checkoutOrder() {
       var name = /^[a-zA-Z ]+$/.test(this.username)
@@ -109,8 +128,9 @@ export default {
     },
     closeModal() {
       this.isOpen = false
-      this.$router.push({ path: '/' })
+      this.$router.push({ path: '/Lesson' })
       this.$store.state.cart = []
+      this.clearShoppingCart()
     },
   },
   computed: {
@@ -124,7 +144,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+.empty-cart {
+  width: 200px;
+}
+
 .shopping-card-cart {
   position: fixed;
   top: 20px;

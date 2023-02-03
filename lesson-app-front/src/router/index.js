@@ -2,10 +2,16 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LessonsList from '../view/LessonsList.vue'
 import ShoppingList from '../view/ShoppingList.vue'
 import NotFoundPage from '../view/NotFoundPage.vue'
+import LoginPage from '../view/Login.vue'
 
 const routes = [
   {
     path: '/',
+    name: 'LoginPage',
+    component: LoginPage,
+  },
+  {
+    path: '/Lesson',
     name: 'LessonsList',
     component: LessonsList,
   },

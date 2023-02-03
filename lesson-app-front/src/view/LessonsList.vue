@@ -188,13 +188,13 @@ export default {
 }
 
 .shopping-card-cart .dis {
-  cursor: not-allowed;
-  background-image: linear-gradient(to right, gray, gray);
+  cursor: not-allowed !important;
+  background-image: linear-gradient(to right, gray, gray) !important;
 }
 
 .shopping-card-cart .dis:hover {
-  transform: translateY(0px);
-  box-shadow: 0px 10px 15px rgba(218, 223, 227, 0.4);
+  transform: translateY(0px) !important;
+  box-shadow: 0px 10px 15px rgba(218, 223, 227, 0.4) !important;
 }
 
 .search {

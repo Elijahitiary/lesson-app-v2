@@ -42,13 +42,14 @@ export default {
         .then(data => {
           if (data.success === true) {
             this.showSuccessMessage()
-            this.$store.commit('ADD_TO_CART', this.lesson)
+            const a = this.$store.state.cart.find(lesson => lesson.id === id)
+            this.$store.commit('ADD_TO_CART', addLesson)
           }
         })
     },
 
     showSuccessMessage() {
-      this.toast.success('successfully added lesson', {
+      this.toast.success(`${this.lesson.topic} successfully added lesson`, {
         timeout: 2000,
         position: 'bottom-left',
       })
