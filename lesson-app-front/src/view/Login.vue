@@ -18,8 +18,10 @@
                 type="text"
                 class="input"
                 v-model="password"
+                placeholder="enter your password"
               />
               <input
+                placeholder="enter your password"
                 v-else
                 type="password"
                 class="input-pass"
@@ -105,7 +107,6 @@ export default {
           .then(res => res.json())
           .then(data => {
             if (data.success === true) {
-              console.log('Y')
               this.$router.push({ path: '/Lesson' })
             } else {
               this.toast.error(`${data.msg}`, {

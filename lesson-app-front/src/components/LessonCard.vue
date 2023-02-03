@@ -41,8 +41,12 @@ export default {
         .then(res => res.json())
         .then(data => {
           if (data.success === true) {
-            const exist = this.$store.state.cart.indexOf(this.lesson)
-            if (this.$store.state.cart.indexOf(this.lesson) === -1) {
+            let exist = false
+            this.$store.state.cart.map(item => {
+              if (item._id === this.lesson._id) exist = true
+            })
+
+            if (!exist) {
               this.$store.commit('ADD_TO_CART', this.lesson)
               this.showSuccessMessage()
             } else {
