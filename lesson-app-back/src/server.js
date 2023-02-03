@@ -1,18 +1,32 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import { MongoClient } from 'mongodb'
+import history from 'connect-history-api-fallback'
+import path from 'path'
 
 const app = express()
 app.use(bodyParser.json())
+app.use('/images', express.static(path.join(__dirname, '../assets')))
+app.use(
+  express.static(path.resolve(__dirname, '../dist'), {
+    maxAge: '1y',
+    etag: false,
+  })
+)
 
 // GET Lessons List
 app.get('/api/lessons', async (req, res) => {
-  const client = await MongoClient.connect('mongodb://localhost:27017', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  const client = await MongoClient.connect(
+    process.env.MONGO_PASS
+      ? `mongodb+srv://${MONGO_DBNAME}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
+      : 'mongodb://localhost:27017',
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
 
-  const db = client.db('lessons-db')
+  const db = client.db(process.env.MONGO_DBNAME || 'lessons-db')
   const lessons = await db.collection('lessons').find({}).toArray()
   res.status(200).json(lessons)
   client.close()
@@ -21,11 +35,16 @@ app.get('/api/lessons', async (req, res) => {
 // GET user data
 app.get('/api/users', async (req, res) => {
   // const { userName } = req.params
-  const client = await MongoClient.connect('mongodb://localhost:27017', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  const db = client.db('lessons-db')
+  const client = await MongoClient.connect(
+    process.env.MONGO_PASS
+      ? `mongodb+srv://${MONGO_DBNAME}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
+      : 'mongodb://localhost:27017',
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  const db = client.db(process.env.MONGO_DBNAME || 'lessons-db')
   const user = await db.collection('users').find({}).toArray()
   if (!user) {
     res.status(404).json({
@@ -39,11 +58,16 @@ app.get('/api/users', async (req, res) => {
 
 // GET User cart
 app.get('/api/users/:userName/cart', async (req, res) => {
-  const client = await MongoClient.connect('mongodb://localhost:27017', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  const db = client.db('lessons-db')
+  const client = await MongoClient.connect(
+    process.env.MONGO_PASS
+      ? `mongodb+srv://${MONGO_DBNAME}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
+      : 'mongodb://localhost:27017',
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  const db = client.db(process.env.MONGO_DBNAME || 'lessons-db')
   const user = await db
     .collection('users')
     .findOne({ username: req.params.userName })
@@ -66,11 +90,16 @@ app.get('/api/users/:userName/cart', async (req, res) => {
 app.post('/api/users/:userName/cart', async (req, res) => {
   const { userName } = req.params
   const { lessonId } = req.body
-  const client = await MongoClient.connect('mongodb://localhost:27017', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  const db = client.db('lessons-db')
+  const client = await MongoClient.connect(
+    process.env.MONGO_PASS
+      ? `mongodb+srv://${MONGO_DBNAME}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
+      : 'mongodb://localhost:27017',
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  const db = client.db(process.env.MONGO_DBNAME || 'lessons-db')
   const lessons = await db.collection('lessons').find({}).toArray()
 
   await db.collection('users').updateOne(
@@ -95,11 +124,16 @@ app.post('/api/users/:userName/cart', async (req, res) => {
 // Remove lesson from the cart
 app.delete('/api/users/:userName/cart/:lessonId', async (req, res) => {
   const { userName, lessonId } = req.params
-  const client = await MongoClient.connect('mongodb://localhost:27017', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  const db = client.db('lessons-db')
+  const client = await MongoClient.connect(
+    process.env.MONGO_PASS
+      ? `mongodb+srv://${MONGO_DBNAME}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
+      : 'mongodb://localhost:27017',
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  const db = client.db(process.env.MONGO_DBNAME || 'lessons-db')
 
   await db.collection('users').updateOne(
     { username: userName },
@@ -122,11 +156,16 @@ app.delete('/api/users/:userName/cart/:lessonId', async (req, res) => {
 // Clear all lessons after checkout
 app.post('/api/users/:userName/clear-cart', async (req, res) => {
   const { userName, lessonId } = req.params
-  const client = await MongoClient.connect('mongodb://localhost:27017', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  const db = client.db('lessons-db')
+  const client = await MongoClient.connect(
+    process.env.MONGO_PASS
+      ? `mongodb+srv://${MONGO_DBNAME}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
+      : 'mongodb://localhost:27017',
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  const db = client.db(process.env.MONGO_DBNAME || 'lessons-db')
 
   await db.collection('users').updateOne(
     { username: userName },
@@ -142,11 +181,16 @@ app.post('/api/users/:userName/clear-cart', async (req, res) => {
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body
 
-  const client = await MongoClient.connect('mongodb://localhost:27017', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  const db = client.db('lessons-db')
+  const client = await MongoClient.connect(
+    process.env.MONGO_PASS
+      ? `mongodb+srv://${MONGO_DBNAME}:${process.env.MONGO_PASS}@cluster0.htmifzd.mongodb.net/?retryWrites=true&w=majority`
+      : 'mongodb://localhost:27017',
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  const db = client.db(process.env.MONGO_DBNAME || 'lessons-db')
 
   const user = await db.collection('users').findOne({ email: email })
   if (!user) {
@@ -172,6 +216,10 @@ app.post('/api/login', async (req, res) => {
   client.close()
 })
 
-app.listen(8000, () => {
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'))
+})
+
+app.listen(process.env.PORT || 8000, () => {
   console.log('Server is listinging at port 8000')
 })
