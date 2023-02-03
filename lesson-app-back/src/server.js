@@ -33,7 +33,7 @@ app.get('/api/users', async (req, res) => {
       success: false,
     })
   }
-  res.status(200).json({ email: user[0].email, passowrd: user[0].passowrd })
+  res.status(200).json({ email: user[0].email, password: user[0].password })
   client.close()
 })
 
@@ -140,7 +140,7 @@ app.post('/api/users/:userName/clear-cart', async (req, res) => {
 
 // Login to account
 app.post('/api/login', async (req, res) => {
-  const { email, passowrd } = req.body
+  const { email, password } = req.body
 
   const client = await MongoClient.connect('mongodb://localhost:27017', {
     useNewUrlParser: true,
@@ -157,7 +157,7 @@ app.post('/api/login', async (req, res) => {
   }
 
   // Check for password
-  if (passowrd === user.passowrd) {
+  if (password === user.password) {
     res.status(200).json({
       msg: 'You are now logged in',
       success: true,
