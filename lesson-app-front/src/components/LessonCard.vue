@@ -42,7 +42,7 @@ export default {
         .then(data => {
           if (data.success === true) {
             let exist = false
-            this.$store.state.cart.map(item => {
+            this.$store.state.cart?.map(item => {
               if (item._id === this.lesson._id) {
                 exist = true
               }
@@ -51,10 +51,6 @@ export default {
             if (!exist) {
               this.showSuccessMessage()
               this.$store.commit('ADD_TO_CART', this.lesson)
-              localStorage.setItem(
-                'cartCount',
-                Number((this.$store.state.cardCount += 1))
-              )
             } else {
               this.showAlertMessage()
             }

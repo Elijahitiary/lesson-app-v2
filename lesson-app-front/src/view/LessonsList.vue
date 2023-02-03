@@ -3,10 +3,10 @@
     <button
       class="card-btn"
       @click="openShopping"
-      :disabled="this.$store.state.cardCount == 0"
-      :class="{ dis: this.$store.state.cardCount == 0 }"
+      :disabled="this.$store.state.cart.length == 0"
+      :class="{ dis: this.$store.state.cart.length == 0 }"
     >
-      Cart {{ this.$store.state.cardCount || 0 }}
+      Cart {{ this.$store.state.cart.length }}
     </button>
   </div>
 
@@ -65,6 +65,7 @@ export default {
       sortBy: '',
       order: '',
       lessons: [],
+      cartItems: 0,
     }
   },
   async created() {
@@ -72,6 +73,13 @@ export default {
     fetch(url)
       .then(res => res.json())
       .then(lessons => (this.lessons = lessons))
+
+    fetch('/api/users/test1/cart')
+      .then(res => res.json())
+      .then(cartItems => {
+        this.cartItems = cartItems
+        this.$store.state.cart = [...cartItems]
+      })
   },
 
   methods: {

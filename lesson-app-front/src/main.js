@@ -10,8 +10,5 @@ const options = {
   maxToasts: 20,
   newestOnTop: true,
 }
-store.subscribe((mutation, state) => {
-  localStorage.setItem('cartCount', state.cart.length)
-})
 
 createApp(App).use(store).use(router).use(Toast, options).mount('#app')
