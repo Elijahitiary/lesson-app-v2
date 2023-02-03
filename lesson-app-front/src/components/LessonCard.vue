@@ -41,15 +41,26 @@ export default {
         .then(res => res.json())
         .then(data => {
           if (data.success === true) {
-            this.showSuccessMessage()
-            const a = this.$store.state.cart.find(lesson => lesson.id === id)
-            this.$store.commit('ADD_TO_CART', addLesson)
+            const exist = this.$store.state.cart.indexOf(this.lesson)
+            if (this.$store.state.cart.indexOf(this.lesson) === -1) {
+              this.$store.commit('ADD_TO_CART', this.lesson)
+              this.showSuccessMessage()
+            } else {
+              this.showAlertMessage()
+            }
           }
         })
     },
 
     showSuccessMessage() {
       this.toast.success(`${this.lesson.topic} successfully added lesson`, {
+        timeout: 2000,
+        position: 'bottom-left',
+      })
+    },
+
+    showAlertMessage() {
+      this.toast.warning(`${this.lesson.topic} lesson is alredy exist`, {
         timeout: 2000,
         position: 'bottom-left',
       })
